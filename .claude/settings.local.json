@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go get:*)",
+      "Bash(go generate:*)",
+      "Bash(go build:)",
+      "Bash(go mod:*)",
+      "Bash(go build:*)",
+      "Bash(find /home/youmin/Projects/bill-bot -type f -name *.go)",
+      "Bash(xargs perl:*)"
+    ]
+  }
+}

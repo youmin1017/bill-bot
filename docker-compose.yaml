@@ -1,0 +1,21 @@
+services:
+  bill-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bill-bot
+    restart: unless-stopped
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      DB_PATH: /app/data/bill-bot.db
+      ACCOUNT_CATEGORY: ${ACCOUNT_CATEGORY:-記帳}
+    volumes:
+      - bill-bot-data:/app/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  bill-bot-data:

@@ -199,8 +199,8 @@ func (c *BalanceCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCr
 	sb.WriteString("**結算方案（最少轉帳）**\n")
 	sb.WriteString("━━━━━━━━━━━━━━━━━━━━\n")
 	for _, st := range settlements {
-		sb.WriteString(fmt.Sprintf("%s 欠 %s **%s**\n",
-			resolveName(st.From), resolveName(st.To), formatAmount(st.Amount)))
+		fmt.Fprintf(&sb, "%s 　→　%s　**%s**\n",
+			resolveName(st.From), resolveName(st.To), formatAmount(st.Amount))
 	}
 
 	respond(s, i, sb.String())

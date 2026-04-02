@@ -86,19 +86,19 @@ func BuildSummary(ctx context.Context, client *ent.Client, l *ent.Ledger, s *dis
 	}
 
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("**%s** 帳本摘要\n", channelName))
+	fmt.Fprintf(&sb, "**%s** 帳本摘要\n", channelName)
 	sb.WriteString("━━━━━━━━━━━━━━━━━━━━\n")
 
 	if len(memberNames) > 0 {
-		sb.WriteString(fmt.Sprintf("成員：%s\n", strings.Join(memberNames, "、")))
+		fmt.Fprintf(&sb, "成員：%s\n", strings.Join(memberNames, "、"))
 	} else {
 		sb.WriteString("成員：（尚無成員）\n")
 	}
 	sb.WriteString("\n")
-	sb.WriteString(fmt.Sprintf("總支出：%s\n", formatAmount(total)))
+	fmt.Fprintf(&sb, "總支出：%s\n", formatAmount(total))
 
 	if len(settlements) > 0 {
-		sb.WriteString("\n結算方案（最少轉帳）：\n")
+		sb.WriteString("\n結算方案：\n")
 		resolve := func(uid string) string {
 			if name := nameMap[uid]; name != "" {
 				return name
@@ -106,7 +106,7 @@ func BuildSummary(ctx context.Context, client *ent.Client, l *ent.Ledger, s *dis
 			return "<@" + uid + ">"
 		}
 		for _, st := range settlements {
-			sb.WriteString(fmt.Sprintf("  %s 　→　%s　%s\n", resolve(st.From), resolve(st.To), formatAmount(st.Amount)))
+			fmt.Fprintf(&sb, "  %s 　→　%s　%s\n", resolve(st.From), resolve(st.To), formatAmount(st.Amount))
 		}
 	}
 
@@ -119,10 +119,10 @@ func BuildSummary(ctx context.Context, client *ent.Client, l *ent.Ledger, s *dis
 			}
 			settledNames = append(settledNames, n)
 		}
-		sb.WriteString(fmt.Sprintf("\n已結清成員：%s\n", strings.Join(settledNames, "、")))
+		fmt.Fprintf(&sb, "\n已結清成員：%s\n", strings.Join(settledNames, "、"))
 	}
 
-	sb.WriteString(fmt.Sprintf("\n最後更新：%s\n", time.Now().Format("2006/01/02 15:04")))
+	fmt.Fprintf(&sb, "\n最後更新：%s\n", time.Now().Format("2006/01/02 15:04"))
 	sb.WriteString("━━━━━━━━━━━━━━━━━━━━\n")
 	sb.WriteString("輸入 /add split|for 新增帳目　/member list 查看成員")
 

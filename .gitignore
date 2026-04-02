@@ -32,6 +32,10 @@ go.work.sum
 # .idea/
 # .vscode/
 
-/tmp
+# sqlite
 *.db
+*.db-shm
+*.db-wal
+
+/tmp
 /config.yaml

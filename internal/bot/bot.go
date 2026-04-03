@@ -11,6 +11,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/samber/do/v2"
+	"github.com/samber/lo"
 )
 
 // Handler is a slash command handler.
@@ -63,14 +64,12 @@ func (b *Bot) Start() error {
 		return err
 	}
 
-	// Register all commands globally (guild-scoped registration is faster for testing)
-	for _, h := range b.handlers {
-		cmd := h.Command()
-		if _, err := b.Session.ApplicationCommandCreate(b.Session.State.User.ID, "", cmd); err != nil {
-			slog.Error("failed to register command", "name", cmd.Name, "error", err)
-		} else {
-			slog.Info("registered command", "name", cmd.Name)
-		}
+	cmds := lo.MapToSlice(b.handlers, func(_ string, h Handler) *discordgo.ApplicationCommand {
+		return h.Command()
+	})
+
+	if _, err := b.Session.ApplicationCommandBulkOverwrite(b.Session.State.User.ID, "", cmds); err != nil {
+		slog.Error("failed to bulk register commands", "error", err)
 	}
 
 	return nil

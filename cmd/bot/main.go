@@ -22,6 +22,7 @@ func main() {
 	bot.Package(i)
 
 	// Register command providers
+	do.Provide(i, commands.NewInitCommand)
 	do.Provide(i, commands.NewPayCommand)
 	do.Provide(i, commands.NewMemberCommand)
 	do.Provide(i, commands.NewSettleCommand)
@@ -31,6 +32,7 @@ func main() {
 	b := do.MustInvoke[*bot.Bot](i)
 
 	// Register command handlers
+	b.Register(do.MustInvoke[*commands.InitCommand](i))
 	b.Register(do.MustInvoke[*commands.PayCommand](i))
 	b.Register(do.MustInvoke[*commands.MemberCommand](i))
 	b.Register(do.MustInvoke[*commands.SettleCommand](i))

@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"bill-bot/ent"
-	"bill-bot/internal/bot"
 	"bill-bot/internal/config"
 	"bill-bot/internal/render"
 	"bill-bot/internal/service"
@@ -56,11 +55,6 @@ func (c *SettleCommand) Command() *discordgo.ApplicationCommand {
 }
 
 func (c *SettleCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	if err := bot.CategoryGuard(s, c.cfg, i.ChannelID); err != nil {
-		respondEphemeral(s, i, ""+err.Error())
-		return
-	}
-
 	ctx := context.Background()
 
 	l, err := service.GetLedger(ctx, c.client, i.ChannelID)
@@ -149,11 +143,6 @@ func (c *BalanceCommand) Command() *discordgo.ApplicationCommand {
 }
 
 func (c *BalanceCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	if err := bot.CategoryGuard(s, c.cfg, i.ChannelID); err != nil {
-		respondEphemeral(s, i, ""+err.Error())
-		return
-	}
-
 	ctx := context.Background()
 
 	l, err := service.GetLedger(ctx, c.client, i.ChannelID)

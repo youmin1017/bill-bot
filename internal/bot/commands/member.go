@@ -9,7 +9,6 @@ import (
 	"bill-bot/ent"
 	"bill-bot/ent/ledger"
 	"bill-bot/ent/ledgermember"
-	"bill-bot/internal/bot"
 	"bill-bot/internal/config"
 	"bill-bot/internal/render"
 	"bill-bot/internal/service"
@@ -78,11 +77,6 @@ func (c *MemberCommand) Command() *discordgo.ApplicationCommand {
 }
 
 func (c *MemberCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	if err := bot.CategoryGuard(s, c.cfg, i.ChannelID); err != nil {
-		respondEphemeral(s, i, ""+err.Error())
-		return
-	}
-
 	ctx := context.Background()
 
 	l, err := service.GetLedger(ctx, c.client, i.ChannelID)

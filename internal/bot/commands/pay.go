@@ -12,7 +12,6 @@ import (
 	"bill-bot/ent"
 	"bill-bot/ent/expense"
 	"bill-bot/ent/payment"
-	"bill-bot/internal/bot"
 	"bill-bot/internal/config"
 	"bill-bot/internal/render"
 	"bill-bot/internal/service"
@@ -137,11 +136,6 @@ func parseAmount(s string) (int64, error) {
 }
 
 func (c *PayCommand) Handle(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	if err := bot.CategoryGuard(s, c.cfg, i.ChannelID); err != nil {
-		respondEphemeral(s, i, err.Error())
-		return
-	}
-
 	ctx := context.Background()
 
 	l, err := service.GetLedger(ctx, c.client, i.ChannelID)
